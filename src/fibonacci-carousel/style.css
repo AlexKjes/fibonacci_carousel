@@ -1,71 +1,84 @@
-@keyframes yolo {
-    50% { grid-row: 2;}
-    100% { grid-row: 2; grid-column-start: 4; grid-column-end: 5; width: 200px }
-}
 
 .galleryContainer{
     border: 1px black dotted;
     position:relative;
-    width: 100%;
+    width: 70%;
     aspect-ratio: 7/3;
     --image-width: calc(100%/7);
     --image-height: calc(100%/3);
 }
 
-.n-4 {
+.img-cell:hover {
+    transform: scale(1.05,1.05);
+    transition: all .2s ease-in-out;
+}
+
+.img-cell {
     position: absolute;
+    transition: all .5s ease-in-out;
+    object-fit: cover
+}
+
+.n-4 {
     top: 0;
     left: calc(2 * var(--image-width));
-    right: calc(2 * var(--image-width));
     width: calc(var(--image-width) * 3);
-    height: auto;
+    height: calc(3 * var(--image-height));
+}
+
+.n-0-left {
+    width: 0;
+    height: var(--image-height);
+}
+
+.n-0-right {
+    width: 0;
+    height: var(--image-height);
+    left: calc(7 * var(--image-width));
 }
 
 .n-1-left {
-    position: absolute;
     top: 0;
     left: 0;
-    rotate: 90deg;
     width: var(--image-width);
+    height: var(--image-height);
 }
 
 .n-1-right {
-    position: absolute;
     top: 0;
     left: calc(6 * var(--image-width));
-    rotate: 90deg;
     width: var(--image-width);
+    height: var(--image-height);
 }
 
 .n-2-left {
-    position: absolute;
     top: 0;
     left: var(--image-width);
-    rotate: 180deg;
     width: var(--image-width);
+    height: var(--image-height);
 }
 
 .n-2-right {
-    position: absolute;
     top: 0;
     left: calc(5 * var(--image-width));
-    rotate: 180deg;
     width: var(--image-width);
+    height: var(--image-height);
 }
 
 .n-3-left {
-    position: absolute;
     top: var(--image-height);
     left: 0;
-    rotate: 270deg;
     width: calc(2 * var(--image-width));
-    aspect-ratio: 1/1;
+    height: calc(2 * var(--image-height));
 }
 
 .n-3-right {
-    position: absolute;
     top: var(--image-height);
     left: calc(5 * var(--image-width));
-    rotate: 270deg;
     width: calc(2 * var(--image-width));
+    height: calc(2 * var(--image-height));
+}
+
+.no-show {
+    display: none;
 }

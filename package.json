@@ -1,6 +1,6 @@
 {
   "name": "@oakjeser/fibonacci-carousel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -10,14 +10,14 @@
   },
   "author": "",
   "license": "ISC",
-
-  "files": ["lib", "readme.md"],
-
+  "files": [
+    "lib",
+    "readme.md"
+  ],
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-
   "devDependencies": {
     "@babel/core": "^7.23.3",
     "@babel/preset-env": "^7.23.3",

@@ -2,10 +2,11 @@
   "name": "@happy-funtime/fibonacci-carousel",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest",
-    "ladle": "ladle serve"
+    "ladle": "ladle serve",
+    "build": "rm lib/* && npx tsc"
   },
   "author": "",
   "license": "ISC",

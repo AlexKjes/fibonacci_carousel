@@ -54,7 +54,7 @@ export const FibonacciCarousel = forwardRef(({imageSources, cycleTimeMillies=0}:
         setState(oldState =>{
         let newClassIndexes = shiftArray(oldState.classIndexes, 1)
         let newDisplaySources = oldState.displayedSources.slice(0);
-        newDisplaySources[newClassIndexes.indexOf(8)] = imageSources[calculateIndex(oldState.centerIndex, -5, imageSources.length)];
+        newDisplaySources[newClassIndexes.indexOf(8)] = imageSources[calculateIndex(oldState.centerIndex, 5, imageSources.length)];
 
         return {
             centerIndex: calculateIndex(oldState.centerIndex, -1, imageSources.length),

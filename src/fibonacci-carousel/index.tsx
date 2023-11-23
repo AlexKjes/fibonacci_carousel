@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
-import { calculateIndex } from "./utils";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { calculateIndex, shiftArray } from "./utils";
 import "./style.css";
 
 export type FibonacciCarouselProps = {
@@ -7,10 +7,35 @@ export type FibonacciCarouselProps = {
     cycleTimeMillies?: number
 }
 
-export const FibonacciCarousel: FC<FibonacciCarouselProps> = ({imageSources, cycleTimeMillies=0}: FibonacciCarouselProps ) => {
+export interface FibonacciCarouselImperativeHandle {
+    nextImage: () => void, previousImage: () => void
+}
 
+ interface FibonacciCarouselState {
+    centerIndex: number,
+    displayedSources: string[],
+    classIndexes: number[],
+}
 
-    let [centerIndex, setCenterIndex] = useState(0);
+interface CarouselRef {
+    ref: React.Ref<FibonacciCarouselImperativeHandle>
+}
+
+export const FibonacciCarousel = forwardRef(({imageSources, cycleTimeMillies=0}: FibonacciCarouselProps & CarouselRef, ref: React.Ref<FibonacciCarouselImperativeHandle>) => {
+
+    let [ state, setState] = useState({
+        centerIndex: 0,
+        displayedSources: Array(9).fill(0).map((_, i) => imageSources[calculateIndex(0, i-4, imageSources.length)]),
+        classIndexes: Array(9).fill(0).map((_, i) => i)
+    });
+
+    const interval = useRef();
+
+    useImperativeHandle(ref, () => ({
+            nextImage() {shiftRight()},
+            previousImage() {shiftLeft()}
+        })
+    )
 
     const classes = [
         "n-0-left img-cell",
@@ -24,47 +49,56 @@ export const FibonacciCarousel: FC<FibonacciCarouselProps> = ({imageSources, cyc
         "n-0-right img-cell"
     ]
 
+    function shiftLeft() {
+        let newClassIndexes = shiftArray(state.classIndexes, 1)
+        let newDisplaySources = state.displayedSources.slice(0);
+        newDisplaySources[newClassIndexes.indexOf(8)] = imageSources[calculateIndex(state.centerIndex, -5, imageSources.length)];
+
+        setState({
+            centerIndex: calculateIndex(state.centerIndex, -1, imageSources.length),
+            displayedSources: newDisplaySources,
+            classIndexes: newClassIndexes
+        });
+    }
+    
+    function shiftRight() {
+        console.log("wtf")
+        let newClassIndexes = shiftArray(state.classIndexes, -1)
+        let newDisplaySources = state.displayedSources.slice(0);
+        newDisplaySources[newClassIndexes.indexOf(0)] = imageSources[calculateIndex(state.centerIndex, -5, imageSources.length)];
+
+        setState({
+            centerIndex: calculateIndex(state.centerIndex, 1, imageSources.length),
+            displayedSources: newDisplaySources,
+            classIndexes: newClassIndexes
+        });
+    }
+
     useEffect(() => {
         if (cycleTimeMillies > 0) {
-            setInterval(() => setCenterIndex(centerIndex--), cycleTimeMillies)
+            console.log("create interval");
+            
+            const interval =  setInterval(shiftRight, cycleTimeMillies);
+            return () => {clearInterval(interval)}
         }
-    }, [])
+    }, [cycleTimeMillies])
 
     return (
         <>
-        <div className="galleryContainer">
-            {imageSources.map((imageSource, index) => <img className={getClassName(index)} src={imageSource} onClick={() => {
-                const classIndex = getClassIndex(index);
-                if (classIndex === -1) return;
-                setCenterIndex(centerIndex+(classIndex-4));
-            }}/>)}
+        <div className="galleryContainer" >
+            {state.displayedSources.map((imgSrc, i) => <img 
+                className={classes[state.classIndexes[i]]} 
+                src={imgSrc}
+                onClick={() => {
+                    let direction = state.classIndexes[i]-4;
+                    let directionAbs = Math.abs(direction)
+                    direction < 0 ? Array(directionAbs).fill(0).forEach((_, i) => shiftRight()) : Array(directionAbs).fill(0).forEach((_, i) => shiftLeft())
+                }}
+                />)}
         </div>
-        <button onClick={() => setCenterIndex(centerIndex++) }>Tilbake</button>
-        <button onClick={() => setCenterIndex(centerIndex--) }>Frem</button>
         </>
     )
 
-    function getClassName(imageIndex: number): string {
-        const classIndex = getClassIndex(imageIndex)
-        if (classIndex === -1) return "no-show";
-        return classes[classIndex];
-    }
-
-    function getClassIndex(imageIndex: number) {
-        let validYolo = [
-            calculateIndex(centerIndex, -4, imageSources.length),
-            calculateIndex(centerIndex, -3, imageSources.length),
-            calculateIndex(centerIndex, -2, imageSources.length),
-            calculateIndex(centerIndex, -1, imageSources.length),
-            calculateIndex(centerIndex, 0, imageSources.length),
-            calculateIndex(centerIndex, 1, imageSources.length),
-            calculateIndex(centerIndex, 2, imageSources.length),
-            calculateIndex(centerIndex, 3, imageSources.length),
-            calculateIndex(centerIndex, 4, imageSources.length)
-        ]
-        return validYolo.indexOf(imageIndex)
-    }
     
-    
-}
+})
 

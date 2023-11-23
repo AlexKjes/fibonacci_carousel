@@ -1,5 +1,5 @@
-import React from "react";
-import { FibonacciCarousel } from "./index";
+import React, { useRef } from "react";
+import { FibonacciCarousel, FibonacciCarouselImperativeHandle } from "./index";
 
 export default {
     title: "Gallery"
@@ -17,4 +17,17 @@ const imageSources = [
     "https://mpost.io/wp-content/uploads/image-74-7.jpg"
 ]
 
-export const GalleryTest = () => <FibonacciCarousel imageSources={imageSources} cycleTimeMillies={0}/>
+export const GalleryTest = () => {
+
+    const ref = useRef<FibonacciCarouselImperativeHandle>()
+
+    return (
+        <>
+        <FibonacciCarousel imageSources={imageSources} cycleTimeMillies={1000} ref={ref}/>
+        <button onClick={() => ref.current?.previousImage()}>prev</button>
+        <button onClick={() => ref.current?.nextImage()}>next</button>
+        </>)
+
+}
+
+

@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "description": "",
   "main": "lib/index.js",
+  "repository": {"url": "https://github.com/AlexKjes/fibonacci_carousel"},
   "scripts": {
     "test": "jest",
     "ladle": "ladle serve",

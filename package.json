@@ -1,12 +1,12 @@
 {
-  "name": "@happy-funtime/fibonacci-carousel",
+  "name": "@alek/fibonacci-carousel",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
     "test": "jest",
     "ladle": "ladle serve",
-    "build": "rm lib/* && npx tsc"
+    "build": "rm lib/* && npx tsc && cp ./src/**/style.css ./lib"
   },
   "author": "",
   "license": "ISC",

@@ -28,6 +28,7 @@ export const FibonacciCarousel = forwardRef(({imageSources, cycleTimeMillies=0}:
         displayedSources: Array(9).fill(0).map((_, i) => imageSources[calculateIndex(0, i-4, imageSources.length)]),
         classIndexes: Array(9).fill(0).map((_, i) => i)
     });
+    const intervalRef = useRef<any | null>(null)
 
     const interval = useRef();
 
@@ -50,36 +51,35 @@ export const FibonacciCarousel = forwardRef(({imageSources, cycleTimeMillies=0}:
     ]
 
     function shiftLeft() {
-        let newClassIndexes = shiftArray(state.classIndexes, 1)
-        let newDisplaySources = state.displayedSources.slice(0);
-        newDisplaySources[newClassIndexes.indexOf(8)] = imageSources[calculateIndex(state.centerIndex, -5, imageSources.length)];
+        setState(oldState =>{
+        let newClassIndexes = shiftArray(oldState.classIndexes, 1)
+        let newDisplaySources = oldState.displayedSources.slice(0);
+        newDisplaySources[newClassIndexes.indexOf(8)] = imageSources[calculateIndex(oldState.centerIndex, -5, imageSources.length)];
 
-        setState({
-            centerIndex: calculateIndex(state.centerIndex, -1, imageSources.length),
+        return {
+            centerIndex: calculateIndex(oldState.centerIndex, -1, imageSources.length),
             displayedSources: newDisplaySources,
             classIndexes: newClassIndexes
-        });
-    }
+        }
+    })
+}
     
     function shiftRight() {
-        console.log("wtf")
-        let newClassIndexes = shiftArray(state.classIndexes, -1)
-        let newDisplaySources = state.displayedSources.slice(0);
-        newDisplaySources[newClassIndexes.indexOf(0)] = imageSources[calculateIndex(state.centerIndex, -5, imageSources.length)];
+        setState(oldState => {
+            let newClassIndexes = shiftArray(oldState.classIndexes, -1)
+            let newDisplaySources = oldState.displayedSources.slice(0);
+            newDisplaySources[newClassIndexes.indexOf(0)] = imageSources[calculateIndex(oldState.centerIndex, -5, imageSources.length)];
 
-        setState({
-            centerIndex: calculateIndex(state.centerIndex, 1, imageSources.length),
+            return {centerIndex: calculateIndex(oldState.centerIndex, 1, imageSources.length),
             displayedSources: newDisplaySources,
-            classIndexes: newClassIndexes
+            classIndexes: newClassIndexes}
         });
     }
 
     useEffect(() => {
         if (cycleTimeMillies > 0) {
-            console.log("create interval");
-            
-            const interval =  setInterval(shiftRight, cycleTimeMillies);
-            return () => {clearInterval(interval)}
+            intervalRef.current =  setInterval(shiftRight, cycleTimeMillies);
+            return () => {clearInterval(intervalRef.current)}
         }
     }, [cycleTimeMillies])
 
@@ -90,6 +90,7 @@ export const FibonacciCarousel = forwardRef(({imageSources, cycleTimeMillies=0}:
                 className={classes[state.classIndexes[i]]} 
                 src={imgSrc}
                 onClick={() => {
+                    clearInterval(intervalRef.current)
                     let direction = state.classIndexes[i]-4;
                     let directionAbs = Math.abs(direction)
                     direction < 0 ? Array(directionAbs).fill(0).forEach((_, i) => shiftRight()) : Array(directionAbs).fill(0).forEach((_, i) => shiftLeft())

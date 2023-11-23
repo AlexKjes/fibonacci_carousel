@@ -1,9 +1,11 @@
 {
   "name": "@oakjeser/fibonacci-carousel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "lib/index.js",
-  "repository": {"url": "https://github.com/AlexKjes/fibonacci_carousel"},
+  "repository": {
+    "url": "https://github.com/AlexKjes/fibonacci_carousel"
+  },
   "scripts": {
     "test": "jest",
     "ladle": "ladle serve",

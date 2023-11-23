@@ -87,6 +87,7 @@ export const FibonacciCarousel = forwardRef(({imageSources, cycleTimeMillies=0}:
         <>
         <div className="galleryContainer" >
             {state.displayedSources.map((imgSrc, i) => <img 
+                key={i}
                 className={classes[state.classIndexes[i]]} 
                 src={imgSrc}
                 onClick={() => {

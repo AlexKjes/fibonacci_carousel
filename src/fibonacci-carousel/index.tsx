@@ -18,7 +18,7 @@ export interface FibonacciCarouselImperativeHandle {
 }
 
 interface CarouselRef {
-    ref: React.Ref<FibonacciCarouselImperativeHandle>
+    ref?: React.Ref<FibonacciCarouselImperativeHandle>
 }
 
 export const FibonacciCarousel = forwardRef(({imageSources, cycleTimeMillies=0}: FibonacciCarouselProps & CarouselRef, ref: React.Ref<FibonacciCarouselImperativeHandle>) => {

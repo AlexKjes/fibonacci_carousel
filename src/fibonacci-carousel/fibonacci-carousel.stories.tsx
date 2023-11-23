@@ -28,7 +28,7 @@ const imageSources = [
 
 export const GalleryTest = () => {
 
-    const ref = useRef<FibonacciCarouselImperativeHandle>()
+    const ref = useRef<FibonacciCarouselImperativeHandle>(null)
 
     return (
         <>
